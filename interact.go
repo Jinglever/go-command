@@ -44,7 +44,11 @@ func AskForInput(question string, defaultAnswer string) string {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
-		fmt.Printf("%s: ", question)
+		if defaultAnswer != "" {
+			fmt.Printf("%s [%s]: ", question, defaultAnswer)
+		} else {
+			fmt.Printf("%s: ", question)
+		}
 		answer, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Println("Error reading input: ", err)
