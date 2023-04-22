@@ -7,16 +7,20 @@ import (
 	"strings"
 )
 
-// AskForOption asks the user a question and returns the answer.
-// The options are presented as a list of options, and the defaultAnswer
-// is the default answer if the user just presses enter. if defaultAnswer is "",
-// then continuse ask until the user enters a valid answer.
+// AskForOption asks the user a question and returns the option.
+// The options are presented as a list of options, and the defaultOption
+// is the default option if the user just presses enter. if defaultOption is "",
+// then continuse ask until the user enters a valid option.
 // The answer is returned as a string.
-func AskForOption(question string, options []string, defaultAnswer string) string {
+func AskForOption(question string, options []string, defaultOption string) string {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
-		fmt.Printf("%s [%s]: ", question, strings.Join(options, "/"))
+		if defaultOption != "" {
+			fmt.Printf("%s [%s default:%s]: ", question, strings.Join(options, "/"), defaultOption)
+		} else {
+			fmt.Printf("%s [%s]: ", question, strings.Join(options, "/"))
+		}
 		answer, err := reader.ReadString('\n')
 		if err != nil {
 			fmt.Println("Error reading input: ", err)
@@ -25,8 +29,8 @@ func AskForOption(question string, options []string, defaultAnswer string) strin
 
 		answer = strings.TrimSpace(answer)
 		if answer == "" {
-			if defaultAnswer != "" {
-				return defaultAnswer
+			if defaultOption != "" {
+				return defaultOption
 			}
 		} else {
 			for _, option := range options {
